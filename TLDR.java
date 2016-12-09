@@ -181,7 +181,8 @@ public class TLDR {
     }
 
     /********************************************* SLOPE RELEVANT *****************************************************/
-    // Retrieve relevant data from the wordArray which contains all words used in the article.
+    // Retrieve relevant data from the wordArray which contains all words used in the article using slope
+    // to remove words that doesn't specify the topic of the article.
     public static WordData[] computeSlopeRelevance (WordData[] wordArray, int arraySize) {
         int slope;
         int index = 0;
@@ -242,9 +243,27 @@ public class TLDR {
     // Using the most relevant words in the wordArray, choose the top words that are the most relevant and rank each
     // sentence based on the relevance of the word to retrieve sentences that gives main ideas of the article.
     private static void findRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
+        int wordCount = 0;
+        WordData[] keyWords = new WordData[10];
+
         for (int i = 0; i < sentences.size(); i++) {
-            //System.out.println(sentences.get(i)+"\n/br");
+            SentenceData sentenceData = new SentenceData();
+            sentenceData.initSentence(sentences.get(i));
+            //System.out.println(sentences.get(i)+"\n\n");
         }
+
+        while (wordArray[wordCount] != null) {
+            wordCount++;
+        }
+
+        wordCount--;
+        for (int i = 0; i < 10; i++) {
+            if (wordArray[wordCount] != null) {
+                keyWords[i] = wordArray[wordCount--];
+                System.out.println(keyWords[i].getWord());
+            }
+        }
+
     }
 
     public static void main (String[] args) {
@@ -285,7 +304,7 @@ public class TLDR {
             wordArray = computeSlopeRelevance(wordArray, arraySize);
             wordArray = removeCommonWords(wordArray, arraySize);
 
-            int x = 0;
+            /*int x = 0;
             int y = 0;
             for (index = 0; index < articleData.size(); index++) {
                 if (wordArray[index] != null) {
@@ -295,7 +314,7 @@ public class TLDR {
                 }
             }
 
-            System.out.println("total word values: "+x+"| word count: "+y);
+            System.out.println("total word values: "+x+"| word count: "+y);*/
 
             /*for (int i = 0; i < sentences.size(); i++) {
                 if (sentences.get(i).contains(wordArray[0].getWord())) {

@@ -15,6 +15,8 @@ public class WordData {
         return this.word;
     }
 
-    public int getWordCount () { return this.wordCount; }
+    public int getWordCount () {
+        return this.wordCount;
+    }
 
 }
