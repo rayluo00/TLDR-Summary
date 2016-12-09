@@ -51,9 +51,9 @@ public class TLDR {
     }
 
     /********************************************* FORM SENTENCE ******************************************************/
-    // Form sentences using a regex to split at every period. Check and match any sentences that should match a quote,
-    // A quote can have multiple sentences, but should be one relevant sentence.
-    // Then match error splits, (ie. splits from Mr. or Mrs.).
+    // Form sentences using a regex to split at every period. Check and match any
+    // sentences that should match a quote. A quote can have multiple sentences,
+    // but should be one relevant sentence. Then match error splits, (ie. Mr. or Mrs.).
     public static void formSentences (String webData, ArrayList<String> sentences) {
         int sentenceCount;
         int sentenceLength;
@@ -170,6 +170,7 @@ public class TLDR {
         return i;
     }
 
+    // Perform quicksort algorithm to sort the words by increasing reference to the word.
     private static void quicksort (WordData[] wordArray, int low, int high) {
         int pivot;
 
@@ -181,8 +182,8 @@ public class TLDR {
     }
 
     /********************************************* SLOPE RELEVANT *****************************************************/
-    // Retrieve relevant data from the wordArray which contains all words used in the article using slope
-    // to remove words that doesn't specify the topic of the article.
+    // Retrieve relevant data from the wordArray which contains all words used in the
+    // article using slope to remove words that doesn't specify the topic of the article.
     public static WordData[] computeSlopeRelevance (WordData[] wordArray, int arraySize) {
         int slope;
         int index = 0;
@@ -208,6 +209,9 @@ public class TLDR {
     }
 
     /********************************************* REMOVE COMMONS *****************************************************/
+    // Remove the commonly used English words from the wordArray, common words are used
+    // very frequently and will interfere with the relevance comparisons with other commonly
+    // used words from the article that can help summarize the given article.
     public static WordData[] removeCommonWords (WordData[] wordArray, int arraySize) {
         String word;
         int commonWordCount;
@@ -219,8 +223,8 @@ public class TLDR {
                 "my", "all", "would", "there", "their", "what", "so", "if", "about", "who", "get", "which", "go", "me" ,
                 "when", "make", "can", "like", "time", "no", "just", "him", "know", "take", "into", "your", "some",
                 "could", "them", "see", "other", "than", "then", "now", "look", "only", "come", "its", "over", "also",
-                "after", "use", "how", "our", "because", "any", "these", "us", "was", "been", "has", "did", "many", "mrs",
-                "mr", "said", "had", "you're", "while"};
+                "after", "use", "how", "our", "because", "any", "these", "us", "was", "been", "has", "did", "many",
+                "mrs", "mr", "said", "had", "you're", "while"};
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
@@ -240,8 +244,9 @@ public class TLDR {
         return newWordArray;
     }
 
-    // Using the most relevant words in the wordArray, choose the top words that are the most relevant and rank each
-    // sentence based on the relevance of the word to retrieve sentences that gives main ideas of the article.
+    // Using the most relevant words in the wordArray, choose the top words that are the most
+    // relevant and rank each sentence based on the relevance of the word to retrieve sentences
+    // that gives main ideas of the article.
     private static void findRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
         int wordCount = 0;
         WordData[] keyWords = new WordData[10];
@@ -266,6 +271,9 @@ public class TLDR {
 
     }
 
+    // Main function that parses the website to retrieve the document as multiple strings. Calls
+    // all the required functions needed to sort and compute the relevant words needed to
+    // summarize the article.
     public static void main (String[] args) {
         int index = 0;
         int arraySize;
@@ -287,17 +295,11 @@ public class TLDR {
                 splitSentence(p.text(), article, articleData);
             }
 
-            /*for (String sentence : sentences) {
-                System.out.println(sentence);
-                System.out.println("=============================================================");
-            }*/
-
             arraySize = articleData.size();
             WordData[] wordArray = new WordData[arraySize];
             for (String w : articleData.keySet()) {
                 WordData currentWord = new WordData(w, articleData.get(w));
                 wordArray[index++] = currentWord;
-                //System.out.println("K : "+w+" | V : "+articleData.get(w));
             }
 
             quicksort(wordArray, 0, articleData.size()-1);
