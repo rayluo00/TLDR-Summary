@@ -1,3 +1,10 @@
+/* TLDR.java
+ * Author: Raymond Weiming Luo
+ *
+ *
+ *
+ */
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,7 +17,7 @@ import java.util.*;
 
 public class TLDR {
 
-    /******************************************** CHECK QUOTATIONS ****************************************************/
+    /****************************************** CHECK QUOTATIONS **************************************************/
     // Return boolean to check if there is only a singular quote in the sentence.
     public static boolean checkMissingQuotes (String sentence) {
         boolean completeQuote = true;
@@ -24,11 +31,10 @@ public class TLDR {
                     completeQuote = true;
             }
         }
-
         return completeQuote;
     }
 
-    /******************************************** CHECK FOR TITLES ****************************************************/
+    /****************************************** CHECK FOR TITLES **************************************************/
     // Return boolean to check if there's a title at the end.
     public static boolean checkSentenceWithTitles (String currentSentence, int sentenceLength) {
         int substringStart;
@@ -46,11 +52,10 @@ public class TLDR {
                 return false;
             }
         }
-
         return true;
     }
 
-    /********************************************* FORM SENTENCE ******************************************************/
+    /******************************************* FORM SENTENCE ****************************************************/
     // Form sentences using a regex to split at every period. Check and match any
     // sentences that should match a quote. A quote can have multiple sentences,
     // but should be one relevant sentence. Then match error splits, (ie. Mr. or Mrs.).
@@ -128,9 +133,10 @@ public class TLDR {
         }
     }
 
-    /********************************************* SPLIT SENTENCE *****************************************************/
+    /******************************************* SPLIT SENTENCE ***************************************************/
     // Split the sentences in an article to get the words used and how often the words are used.
-    public static void splitSentence (String sentence, ArrayList<String> article, HashMap<String, Integer> articleData) {
+    public static void splitSentence (String sentence, ArrayList<String> article,
+				      HashMap<String, Integer> articleData) {
         ArrayList<String> sentenceList = new ArrayList<>(Arrays.asList(sentence.replaceAll("&|\"|,|\\.|:|\'|/|\\\\|\\|", "").split("\\s")));
         sentenceList.add("\n");
 
@@ -146,7 +152,7 @@ public class TLDR {
         }
     }
 
-    /************************************************ QUICKSORT *******************************************************/
+    /********************************************** QUICKSORT *****************************************************/
     private static void swap (WordData[] wordArray, int OLD, int NEW) {
         WordData temp;
 
@@ -166,7 +172,6 @@ public class TLDR {
             }
         }
         swap(wordArray, i, high);
-
         return i;
     }
 
@@ -181,7 +186,7 @@ public class TLDR {
         }
     }
 
-    /********************************************* SLOPE RELEVANT *****************************************************/
+    /******************************************* SLOPE RELEVANT ***************************************************/
     // Retrieve relevant data from the wordArray which contains all words used in the
     // article using slope to remove words that doesn't specify the topic of the article.
     public static WordData[] computeSlopeRelevance (WordData[] wordArray, int arraySize) {
@@ -204,11 +209,10 @@ public class TLDR {
                 index++;
             }
         }
-
         return newWordArray;
     }
 
-    /********************************************* REMOVE COMMONS *****************************************************/
+    /******************************************* REMOVE COMMONS ***************************************************/
     // Remove the commonly used English words from the wordArray, common words are used
     // very frequently and will interfere with the relevance comparisons with other commonly
     // used words from the article that can help summarize the given article.
@@ -218,13 +222,13 @@ public class TLDR {
         int index = 0;
         WordData[] newWordArray = new WordData[arraySize];
         String[] commonWords = {
-            "the","be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for", "not", "on", "with", "he", "as",
-                "you", "do", "at", "this", "but", "his", "by", "from", "they", "we", "say", "her", "she", "or", "an",
-                "my", "all", "would", "there", "their", "what", "so", "if", "about", "who", "get", "which", "go", "me" ,
-                "when", "make", "can", "like", "time", "no", "just", "him", "know", "take", "into", "your", "some",
-                "could", "them", "see", "other", "than", "then", "now", "look", "only", "come", "its", "over", "also",
-                "after", "use", "how", "our", "because", "any", "these", "us", "was", "been", "has", "did", "many",
-                "mrs", "mr", "said", "had", "you're", "while"};
+            "the","be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for", "not", "on", "with", "he",
+	    "as", "you", "do", "at", "this", "but", "his", "by", "from", "they", "we", "say", "her", "she", "or",
+	    "an", "my", "all", "would", "there", "their", "what", "so", "if", "about", "who", "get", "which", "go",
+	    "me" , "when", "make", "can", "like", "time", "no", "just", "him", "know", "take", "into", "your",
+	    "some", "could", "them", "see", "other", "than", "then", "now", "look", "only", "come", "its", "over",
+	    "also", "after", "use", "how", "our", "because", "any", "these", "us", "was", "been", "has", "did",
+	    "many", "mrs", "mr", "said", "had", "you're", "while"};
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
@@ -239,8 +243,6 @@ public class TLDR {
                     newWordArray[index++] = wordArray[i];
             }
         }
-
-
         return newWordArray;
     }
 
@@ -278,7 +280,6 @@ public class TLDR {
                     }
                 }
             }
-
             relevantSentence.add(sentenceData);
             //System.out.println(sentences.get(i)+"\n\n");
         }
@@ -323,24 +324,6 @@ public class TLDR {
             quicksort(wordArray, 0, articleData.size()-1);
             wordArray = computeSlopeRelevance(wordArray, arraySize);
             wordArray = removeCommonWords(wordArray, arraySize);
-
-            /*int x = 0;
-            int y = 0;
-            for (index = 0; index < articleData.size(); index++) {
-                if (wordArray[index] != null) {
-                    x += wordArray[index].getWordCount();
-                    y++;
-                    System.out.println("K : " + wordArray[index].getWord() + " | V : " + wordArray[index].getWordCount());
-                }
-            }
-
-            System.out.println("total word values: "+x+"| word count: "+y);*/
-
-            /*for (int i = 0; i < sentences.size(); i++) {
-                if (sentences.get(i).contains(wordArray[0].getWord())) {
-                    System.out.println(sentences.get(i) + " CONTAINS : "+wordArray[0].getWord());
-                }
-            }*/
 
             findRelevantSentences(sentences, wordArray);
 

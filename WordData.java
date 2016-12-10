@@ -1,5 +1,11 @@
-/**
- * Created by Ray Luo on 7/30/2016.
+/* WordData.java
+ *
+ * Author: Raymond Weiming Luo
+ *
+ * Object to hold the word and amount of times it was referenced
+ * in the article. The greater the wordCount means the more
+ * frequent the word is used in the article.
+ * 
  */
 public class WordData {
 
@@ -11,9 +17,7 @@ public class WordData {
         this.wordCount = inputWordCount;
     }
 
-    public String getWord () {
-        return this.word;
-    }
+    public String getWord () { return this.word; }
 
     public int getWordCount () { return this.wordCount; }
 
