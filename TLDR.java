@@ -248,25 +248,43 @@ public class TLDR {
     // relevant and rank each sentence based on the relevance of the word to retrieve sentences
     // that gives main ideas of the article.
     private static void findRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
+        int i;
         int wordCount = 0;
         WordData[] keyWords = new WordData[10];
-
-        for (int i = 0; i < sentences.size(); i++) {
-            SentenceData sentenceData = new SentenceData();
-            sentenceData.initSentence(sentences.get(i));
-            //System.out.println(sentences.get(i)+"\n\n");
-        }
+        ArrayList<SentenceData> relevantSentence = new ArrayList<>();
 
         while (wordArray[wordCount] != null) {
             wordCount++;
         }
 
         wordCount--;
-        for (int i = 0; i < 10; i++) {
+        for (i = 0; i < 10; i++) {
             if (wordArray[wordCount] != null) {
                 keyWords[i] = wordArray[wordCount--];
                 System.out.println(keyWords[i].getWord());
             }
+        }
+
+        for (i = 0; i < sentences.size(); i++) {
+            SentenceData sentenceData = new SentenceData();
+            sentenceData.initSentence(sentences.get(i));
+
+            for (int j = 0; j < 10; j++) {
+                if (keyWords[j] == null)
+                    break;
+                else {
+                    if (sentenceData.getSentence().contains(keyWords[j].getWord())) {
+                        sentenceData.setReference(sentenceData.getReference()+1);
+                    }
+                }
+            }
+
+            relevantSentence.add(sentenceData);
+            //System.out.println(sentences.get(i)+"\n\n");
+        }
+
+        for (SentenceData x : relevantSentence) {
+            System.out.println(x.getSentence()+" | "+x.getReference()+"\n");
         }
 
     }
