@@ -1,8 +1,12 @@
 /* TLDR.java
+ *
+ * TLDR - Summarize Article program
  * Author: Raymond Weiming Luo
  *
- *
- *
+ * This program receives the document from a news article website using JSoup.
+ * Then summarizes the relevant information into a  about a paragraph or two
+ * depending on the original length of the original document. The program has
+ * a regex to split words and determines the relevant keywords for the summary.
  */
 
 import org.jsoup.Jsoup;
@@ -236,13 +240,16 @@ public class TLDR {
         int index = 0;
         WordData[] newWordArray = new WordData[arraySize];
         String[] commonWords = {
-            "the","be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for", "not", "on", "with", "he",
-	    "as", "you", "do", "at", "this", "but", "his", "by", "from", "they", "we", "say", "her", "she", "or",
-	    "an", "my", "all", "would", "there", "their", "what", "so", "if", "about", "who", "get", "which", "go",
-	    "me" , "when", "make", "can", "like", "time", "no", "just", "him", "know", "take", "into", "your",
-	    "some", "could", "them", "see", "other", "than", "then", "now", "look", "only", "come", "its", "over",
-	    "also", "after", "use", "how", "our", "because", "any", "these", "us", "was", "been", "has", "did",
-	    "many", "mrs", "mr", "said", "had", "you're", "while"};
+                "the","be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for",
+                "not", "on", "with", "he", "as", "you", "do", "at", "this", "but", "his",
+                "by", "from", "they", "we", "say", "her", "she", "or", "an", "my", "all",
+                "would", "there", "their", "what", "so", "if", "about", "who", "get",
+                "which", "go", "me" , "when", "make", "can", "like", "time", "no", "just",
+                "him", "know", "take", "into", "your", "some", "could", "them", "see",
+                "other", "than", "then", "now", "look", "only", "come", "its", "over",
+                "also", "after", "use", "how", "our", "because", "any", "these", "us",
+                "was", "been", "has", "did", "many", "mrs", "mr", "said", "had", "you're",
+                "while"};
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
