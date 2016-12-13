@@ -25,15 +25,16 @@ public class TLDR {
      * Return boolean to check if there is only a singular quote in the sentence.
      */
     public static boolean checkMissingQuotes (String sentence) {
-        boolean completeQuote = true;
         int sentenceLength = sentence.length();
+        boolean completeQuote = true;
 
         for (int i = 0; i < sentenceLength; i++) {
             if (sentence.charAt(i) == '"') {
-                if (completeQuote)
+                if (completeQuote) {
                     completeQuote = false;
-                else
+                } else {
                     completeQuote = true;
+                }
             }
         }
         return completeQuote;
@@ -47,10 +48,11 @@ public class TLDR {
         String titleCheck;
         String[] titleArray= {"Mr", " Mr", "Ms", " Ms", "Mrs", "Dr", " Dr", " Lt", "Lt"};
 
-        if (sentenceLength < 3)
+        if (sentenceLength < 3) {
             substringStart = 2;
-        else
+        } else {
             substringStart = 3;
+        }
 
         titleCheck = currentSentence.substring((sentenceLength-substringStart), (sentenceLength));
         for (String title : titleArray) {
@@ -70,12 +72,13 @@ public class TLDR {
         int sentenceCount;
         int sentenceLength;
         char period_or_quote;
-        boolean fullQuote = true;
-        boolean inQuote = false;
-        boolean hasEndingTitle = false;
         String sentence = "";
         String titleSentence = "";
         String currentSentence;
+        boolean inQuote = false;
+        boolean fullQuote = true;
+        boolean hasEndingTitle = false;
+
         ArrayList<String> currSentences = new ArrayList<>(Arrays.asList(webData.split("((?<=[a-z])|(?<=[0-9]))\\.\\s+")));
 
         sentenceCount = currSentences.size();
@@ -144,19 +147,22 @@ public class TLDR {
      * Split the sentences in an article to get the words used and how often the words are used.
      */
     public static void splitSentence (String sentence, ArrayList<String> article,
-				      HashMap<String, Integer> articleData) {
+                                      HashMap<String, Integer> articleData) {
+
         ArrayList<String> sentenceList = new ArrayList<>(Arrays.asList(
                 sentence.replaceAll("&|\"|,|\\.|:|\'|/|\\\\|\\|", "").split("\\s")));
+
         sentenceList.add("\n");
 
         for (String word : sentenceList) {
             if (!word.equals("")) {
                 article.add(word);
 
-                if (articleData.containsKey(word))
-                    articleData.replace(word, (articleData.get(word)+1));
-                else
+                if (articleData.containsKey(word)) {
+                    articleData.replace(word, (articleData.get(word) + 1));
+                } else {
                     articleData.put(word, 1);
+                }
             }
         }
     }
@@ -177,8 +183,8 @@ public class TLDR {
      * the current index is less than the pivot.
      */
     private static int partition (WordData[] wordArray, int low, int high) {
-        int pivot = wordArray[high].getWordCount();
         int i = low;
+        int pivot = wordArray[high].getWordCount();
 
         for (int j = low; j <= high-1; j++) {
             if (wordArray[j].getWordCount() <= pivot) {
@@ -216,10 +222,11 @@ public class TLDR {
         for (int i = 0; i < arraySize-1; i++) {
             slope = (wordArray[i+1].getWordCount() - wordArray[i].getWordCount()) / ((i+2)-(i+1));
 
-            if (slope > 0 && slope < 2 && !relevantDataFlag)
+            if (slope > 0 && slope < 2 && !relevantDataFlag) {
                 relevantDataFlag = true;
-            else if (relevantDataFlag && slope > 2)
+            } else if (relevantDataFlag && slope > 2) {
                 relevantDataFlag = false;
+            }
 
             if (relevantDataFlag) {
                 newWordArray[index] = wordArray[i];
@@ -235,9 +242,9 @@ public class TLDR {
      * used words from the article that can help summarize the given article.
      */
     public static WordData[] removeCommonWords (WordData[] wordArray, int arraySize) {
-        String word;
-        int commonWordCount;
         int index = 0;
+        int commonWordCount;
+        String word;
         WordData[] newWordArray = new WordData[arraySize];
         String[] commonWords = {
                 "the","be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for",
@@ -253,15 +260,18 @@ public class TLDR {
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
-            if (wordArray[i] == null)
+            if (wordArray[i] == null) {
                 break;
+            }
 
             word = wordArray[i].getWord();
             for (int j = 0; j < commonWordCount; j++) {
-                if (commonWords[j].equals(word.toLowerCase()))
+                if (commonWords[j].equals(word.toLowerCase())) {
                     break;
-                if ((j+1) == commonWordCount)
+                }
+                if ((j+1) == commonWordCount) {
                     newWordArray[index++] = wordArray[i];
+                }
             }
         }
         return newWordArray;
@@ -276,8 +286,8 @@ public class TLDR {
         int i;
         int maxRef = 0;
         int totalRef = 0;
-        int currentRef;
         int wordCount = 0;
+        int currentRef;
         WordData[] keyWords = new WordData[10];
         ArrayList<SentenceData> relevantSentence = new ArrayList<>();
         ArrayList<SentenceData> summary = new ArrayList<>();
@@ -299,15 +309,16 @@ public class TLDR {
             sentenceData.initSentence(sentences.get(i));
 
             for (int j = 0; j < 10; j++) {
-                if (keyWords[j] == null)
+                if (keyWords[j] == null) {
                     break;
-                else {
+                } else {
                     if (sentenceData.getSentence().contains(keyWords[j].getWord())) {
                         currentRef = sentenceData.getReference()+1;
-
                         totalRef += currentRef;
-                        if (currentRef > maxRef)
+
+                        if (currentRef > maxRef) {
                             maxRef = currentRef;
+                        }
 
                         sentenceData.setReference(currentRef);
                     }
@@ -351,6 +362,7 @@ public class TLDR {
 
             arraySize = articleData.size();
             WordData[] wordArray = new WordData[arraySize];
+
             for (String w : articleData.keySet()) {
                 WordData currentWord = new WordData(w, articleData.get(w));
                 wordArray[index++] = currentWord;
