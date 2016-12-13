@@ -17,8 +17,9 @@ import java.util.*;
 
 public class TLDR {
 
-    /****************************************** CHECK QUOTATIONS **************************************************/
-    // Return boolean to check if there is only a singular quote in the sentence.
+    /***********************************************************************************************
+     * Return boolean to check if there is only a singular quote in the sentence.
+     */
     public static boolean checkMissingQuotes (String sentence) {
         boolean completeQuote = true;
         int sentenceLength = sentence.length();
@@ -34,8 +35,9 @@ public class TLDR {
         return completeQuote;
     }
 
-    /****************************************** CHECK FOR TITLES **************************************************/
-    // Return boolean to check if there's a title at the end.
+    /***********************************************************************************************
+     * Return boolean to check if there's a title at the end.
+     */
     public static boolean checkSentenceWithTitles (String currentSentence, int sentenceLength) {
         int substringStart;
         String titleCheck;
@@ -55,10 +57,11 @@ public class TLDR {
         return true;
     }
 
-    /******************************************* FORM SENTENCE ****************************************************/
-    // Form sentences using a regex to split at every period. Check and match any
-    // sentences that should match a quote. A quote can have multiple sentences,
-    // but should be one relevant sentence. Then match error splits, (ie. Mr. or Mrs.).
+    /***********************************************************************************************
+     * Form sentences using a regex to split at every period. Check and match any
+     * sentences that should match a quote. A quote can have multiple sentences,
+     * but should be one relevant sentence. Then match error splits, (ie. Mr. or Mrs.).
+     */
     public static void formSentences (String webData, ArrayList<String> sentences) {
         int sentenceCount;
         int sentenceLength;
@@ -82,7 +85,7 @@ public class TLDR {
                 currSentences.set(i, (currentSentence+="."));
             }
 
-            /* Combine split quotes. */
+            // Combine split quotes.
             if (!checkMissingQuotes(currentSentence)) {
                 if (fullQuote) {
                     sentence = currentSentence;
@@ -102,7 +105,7 @@ public class TLDR {
                 currSentences.set(i, "");
             }
 
-            /* Combine sentences ending with titles. Ex. Mr. Smith, Dr. Smith, Mrs. Smith */
+            // Combine sentences ending with titles. Ex. Mr. Smith, Dr. Smith, Mrs. Smith
             if (!checkSentenceWithTitles(currentSentence, sentenceLength)) {
                 if (!hasEndingTitle) {
                     titleSentence = currentSentence;
@@ -133,11 +136,13 @@ public class TLDR {
         }
     }
 
-    /******************************************* SPLIT SENTENCE ***************************************************/
-    // Split the sentences in an article to get the words used and how often the words are used.
+    /***********************************************************************************************
+     * Split the sentences in an article to get the words used and how often the words are used.
+     */
     public static void splitSentence (String sentence, ArrayList<String> article,
 				      HashMap<String, Integer> articleData) {
-        ArrayList<String> sentenceList = new ArrayList<>(Arrays.asList(sentence.replaceAll("&|\"|,|\\.|:|\'|/|\\\\|\\|", "").split("\\s")));
+        ArrayList<String> sentenceList = new ArrayList<>(Arrays.asList(
+                sentence.replaceAll("&|\"|,|\\.|:|\'|/|\\\\|\\|", "").split("\\s")));
         sentenceList.add("\n");
 
         for (String word : sentenceList) {
@@ -152,7 +157,9 @@ public class TLDR {
         }
     }
 
-    /********************************************** QUICKSORT *****************************************************/
+    /***********************************************************************************************
+     * Swap the WordData object in the array from the OLD position to the NEW position.
+     */
     private static void swap (WordData[] wordArray, int OLD, int NEW) {
         WordData temp;
 
@@ -161,6 +168,10 @@ public class TLDR {
         wordArray[NEW] = temp;
     }
 
+    /***********************************************************************************************
+     * Partition the array for quicksort and swap the pivot (i) with the current index (j) if
+     * the current index is less than the pivot.
+     */
     private static int partition (WordData[] wordArray, int low, int high) {
         int pivot = wordArray[high].getWordCount();
         int i = low;
@@ -175,7 +186,9 @@ public class TLDR {
         return i;
     }
 
-    // Perform quicksort algorithm to sort the words by increasing reference to the word.
+    /***********************************************************************************************
+     * Perform quicksort algorithm to sort the words by increasing reference to the word.
+     */
     private static void quicksort (WordData[] wordArray, int low, int high) {
         int pivot;
 
@@ -186,9 +199,10 @@ public class TLDR {
         }
     }
 
-    /******************************************* SLOPE RELEVANT ***************************************************/
-    // Retrieve relevant data from the wordArray which contains all words used in the
-    // article using slope to remove words that doesn't specify the topic of the article.
+    /***********************************************************************************************
+     * Retrieve relevant data from the wordArray which contains all words used in the
+     * article using slope to remove words that doesn't specify the topic of the article.
+     */
     public static WordData[] computeSlopeRelevance (WordData[] wordArray, int arraySize) {
         int slope;
         int index = 0;
@@ -197,7 +211,6 @@ public class TLDR {
 
         for (int i = 0; i < arraySize-1; i++) {
             slope = (wordArray[i+1].getWordCount() - wordArray[i].getWordCount()) / ((i+2)-(i+1));
-            //System.out.println(slope);
 
             if (slope > 0 && slope < 2 && !relevantDataFlag)
                 relevantDataFlag = true;
@@ -212,10 +225,11 @@ public class TLDR {
         return newWordArray;
     }
 
-    /******************************************* REMOVE COMMONS ***************************************************/
-    // Remove the commonly used English words from the wordArray, common words are used
-    // very frequently and will interfere with the relevance comparisons with other commonly
-    // used words from the article that can help summarize the given article.
+    /***********************************************************************************************
+     * Remove the commonly used English words from the wordArray, common words are used
+     * very frequently and will interfere with the relevance comparisons with other commonly
+     * used words from the article that can help summarize the given article.
+     */
     public static WordData[] removeCommonWords (WordData[] wordArray, int arraySize) {
         String word;
         int commonWordCount;
@@ -246,9 +260,11 @@ public class TLDR {
         return newWordArray;
     }
 
-    // Using the most relevant words in the wordArray, choose the top words that are the most
-    // relevant and rank each sentence based on the relevance of the word to retrieve sentences
-    // that gives main ideas of the article.
+    /**********************************************************************************************
+     * Using the most relevant words in the wordArray, choose the top words that are the most
+     * relevant and rank each sentence based on the relevance of the word to retrieve sentences
+     * that gives main ideas of the article.
+     */
     private static void findRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
         int i;
         int maxRef = 0;
@@ -300,9 +316,11 @@ public class TLDR {
 
     }
 
-    // Main function that parses the website to retrieve the document as multiple strings. Calls
-    // all the required functions needed to sort and compute the relevant words needed to
-    // summarize the article.
+    /***********************************************************************************************
+     * Main function that parses the website to retrieve the document as multiple strings. Calls
+     * all the required functions needed to sort and compute the relevant words needed to
+     * summarize the article.
+     */
     public static void main (String[] args) {
         int index = 0;
         int arraySize;
