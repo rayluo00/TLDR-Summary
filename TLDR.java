@@ -251,9 +251,13 @@ public class TLDR {
     // that gives main ideas of the article.
     private static void findRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
         int i;
+        int maxRef = 0;
+        int totalRef = 0;
+        int currentRef;
         int wordCount = 0;
         WordData[] keyWords = new WordData[10];
         ArrayList<SentenceData> relevantSentence = new ArrayList<>();
+        ArrayList<SentenceData> summary = new ArrayList<>();
 
         while (wordArray[wordCount] != null) {
             wordCount++;
@@ -276,14 +280,20 @@ public class TLDR {
                     break;
                 else {
                     if (sentenceData.getSentence().contains(keyWords[j].getWord())) {
-                        sentenceData.setReference(sentenceData.getReference()+1);
+                        currentRef = sentenceData.getReference()+1;
+
+                        totalRef += currentRef;
+                        if (currentRef > maxRef)
+                            maxRef = currentRef;
+
+                        sentenceData.setReference(currentRef);
                     }
                 }
             }
             relevantSentence.add(sentenceData);
-            //System.out.println(sentences.get(i)+"\n\n");
         }
 
+        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+(totalRef/sentences.size())+"\n\n");
         for (SentenceData x : relevantSentence) {
             System.out.println(x.getSentence()+" | "+x.getReference()+"\n");
         }
