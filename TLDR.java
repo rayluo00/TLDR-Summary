@@ -256,7 +256,7 @@ public class TLDR {
                 "other", "than", "then", "now", "look", "only", "come", "its", "over",
                 "also", "after", "use", "how", "our", "because", "any", "these", "us",
                 "was", "been", "has", "did", "many", "mrs", "mr", "said", "had", "you're",
-                "while"};
+                "while", "ms", "dr", "lt"};
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
@@ -338,8 +338,8 @@ public class TLDR {
             relevantSentence.add(sentenceData);
         }
 
-        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+(totalRef/sentenceCount)+"\n");
         avgRef = totalRef / sentenceCount;
+        System.out.println("\n=========================== START SUMMARY ===========================");
 
         for (i = 0; i < sentenceCount; i++) {
             currRelevantRef = relevantSentence.get(i).getReference();
@@ -348,27 +348,30 @@ public class TLDR {
             // Add current sentence if it contains more keywords than the average sentences.
             /*if (currRelevantRef > avgRef) {
                 System.out.println(currRelevantRef+" | "+currRelevantSentence);
+                relevantSentence.get(i).setInSummaryTrue();
                 summary.add(currRelevantSentence);
             }*/
 
             // Add the previous relevant sentence to give current sentence more context.
             if (currRelevantRef > avgRef && i > 0) {
+                tempSentence = relevantSentence.get(i-1).getSentence();
                 tempRelevantRef = relevantSentence.get(i-1).getReference();
-                if (tempRelevantRef >= 1) {
-                    tempSentence = relevantSentence.get(i-1).getSentence();
+                if (tempRelevantRef >= 1 && !relevantSentence.get(i-1).getInSummary()) {
                     System.out.println(tempRelevantRef+" | "+tempSentence);
                     summary.add(tempSentence);
                 }
 
                 System.out.println(currRelevantRef+" | "+currRelevantSentence);
+                relevantSentence.get(i).setInSummaryTrue();
                 summary.add(currRelevantSentence);
             }
         }
 
+        System.out.println("============================ END SUMMARY ============================");
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
         decreasePercentage = decreasePercentage / sentenceCount * 100;
-        System.out.println("\nPREV SENTENCE SIZE: "+sentenceCount+" | NEW SENTENCE SIZE: "+summarySize+" | COMPRESSION: "+decreasePercentage);
+        System.out.format("PREV SIZE: %d | NEW SIZE: %d | COMPRESSION: %.2f", sentenceCount, summarySize, decreasePercentage);
     }
 
     /***********************************************************************************************
@@ -382,8 +385,8 @@ public class TLDR {
         ArrayList<String> article = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
         HashMap<String, Integer> articleData = new HashMap<>();
-        String website = "http://www.pcworld.com/article/3094797/analytics/googles-ai-is-learning-how-to-save-your-life.html";
-        //String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
+        //String website = "http://www.pcworld.com/article/3094797/analytics/googles-ai-is-learning-how-to-save-your-life.html";
+        String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
         //String website = "http://www.nytimes.com/2016/07/23/us/politics/tim-kaine-hillary-clinton-vice-president.html";
 
         try {

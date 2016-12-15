@@ -12,15 +12,21 @@ public class SentenceData {
 
     private String sentence;
     private int reference;
+    private boolean inSummary;
 
     public void initSentence (String inputSentence) {
         this.sentence = inputSentence;
         this.reference = 0;
+        this.inSummary = false;
     }
 
     public String getSentence () { return this.sentence; }
 
+    public int getReference () { return this.reference; }
+
+    public boolean getInSummary () { return this.inSummary; }
+
     public void setReference (int inputReference) { this.reference = inputReference; }
 
-    public int getReference () { return this.reference; }
+    public void setInSummaryTrue () { this.inSummary = true; }
 }
