@@ -290,7 +290,9 @@ public class TLDR {
         int wordCount = 0;
         int currentRef;
         int sentenceCount = sentences.size();
+        int tempRelevantRef;
         int currRelevantRef;
+        String tempSentence;
         String currRelevantSentence;
         WordData[] keyWords = new WordData[8];
         ArrayList<SentenceData> relevantSentence = new ArrayList<>();
@@ -305,7 +307,7 @@ public class TLDR {
         for (i = 0; i < 8; i++) {
             if (wordArray[wordCount] != null) {
                 keyWords[i] = wordArray[wordCount--];
-                System.out.println(keyWords[i].getWord());
+                System.out.println(keyWords[i].getWordCount()+" | KEYWORD: "+keyWords[i].getWord());
             }
         }
 
@@ -334,18 +336,34 @@ public class TLDR {
             relevantSentence.add(sentenceData);
         }
 
-        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+(totalRef/sentenceCount)+"\n\n");
+        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+(totalRef/sentenceCount)+"\n");
         avgRef = totalRef / sentenceCount;
+
         for (i = 0; i < sentenceCount; i++) {
             currRelevantRef = relevantSentence.get(i).getReference();
             currRelevantSentence = relevantSentence.get(i).getSentence();
 
-            if (currRelevantRef > avgRef) {
+            // Add current sentence if it contains more keywords than the average sentences.
+            /*if (currRelevantRef > avgRef) {
+                System.out.println(currRelevantRef+" | "+currRelevantSentence);
+                summary.add(currRelevantSentence);
+            }*/
+
+            // Add the previous relevant sentence to give current sentence more context.
+            if (currRelevantRef > avgRef && i > 0) {
+                tempRelevantRef = relevantSentence.get(i-1).getReference();
+                if (tempRelevantRef >= 1) {
+                    tempSentence = relevantSentence.get(i-1).getSentence();
+                    System.out.println(tempRelevantRef+" | "+tempSentence);
+                    summary.add(tempSentence);
+                }
+
                 System.out.println(currRelevantRef+" | "+currRelevantSentence);
                 summary.add(currRelevantSentence);
             }
         }
 
+        System.out.println("PREV SENTENCE SIZE: "+sentenceCount+" | NEW SENTENCE SIZE: "+summary.size());
     }
 
     /***********************************************************************************************
