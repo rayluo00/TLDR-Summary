@@ -289,9 +289,11 @@ public class TLDR {
         int totalRef = 0;
         int wordCount = 0;
         int currentRef;
+        int summarySize;
         int sentenceCount = sentences.size();
         int tempRelevantRef;
         int currRelevantRef;
+        float decreasePercentage;
         String tempSentence;
         String currRelevantSentence;
         WordData[] keyWords = new WordData[8];
@@ -307,7 +309,7 @@ public class TLDR {
         for (i = 0; i < 8; i++) {
             if (wordArray[wordCount] != null) {
                 keyWords[i] = wordArray[wordCount--];
-                System.out.println(keyWords[i].getWordCount()+" | KEYWORD: "+keyWords[i].getWord());
+                System.out.println(keyWords[i].getWordCount()+" | "+keyWords[i].getWord());
             }
         }
 
@@ -363,7 +365,10 @@ public class TLDR {
             }
         }
 
-        System.out.println("PREV SENTENCE SIZE: "+sentenceCount+" | NEW SENTENCE SIZE: "+summary.size());
+        summarySize = summary.size();
+        decreasePercentage = sentenceCount - summarySize;
+        decreasePercentage = decreasePercentage / sentenceCount * 100;
+        System.out.println("\nPREV SENTENCE SIZE: "+sentenceCount+" | NEW SENTENCE SIZE: "+summarySize+" | COMPRESSION: "+decreasePercentage);
     }
 
     /***********************************************************************************************
