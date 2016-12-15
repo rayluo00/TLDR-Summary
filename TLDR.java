@@ -284,31 +284,38 @@ public class TLDR {
      */
     private static void findRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
         int i;
+        int avgRef;
         int maxRef = 0;
         int totalRef = 0;
         int wordCount = 0;
         int currentRef;
-        WordData[] keyWords = new WordData[10];
+        int sentenceCount = sentences.size();
+        int currRelevantRef;
+        String currRelevantSentence;
+        WordData[] keyWords = new WordData[8];
         ArrayList<SentenceData> relevantSentence = new ArrayList<>();
-        ArrayList<SentenceData> summary = new ArrayList<>();
+        ArrayList<String> summary = new ArrayList<>();
 
         while (wordArray[wordCount] != null) {
             wordCount++;
         }
 
+        // Sort key words by decreasing word references.
         wordCount--;
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < 8; i++) {
             if (wordArray[wordCount] != null) {
                 keyWords[i] = wordArray[wordCount--];
                 System.out.println(keyWords[i].getWord());
             }
         }
 
-        for (i = 0; i < sentences.size(); i++) {
+        // Provide a rank to each sentence by increasing the rank based off
+        // the amount of key words the sentence contains.
+        for (i = 0; i < sentenceCount; i++) {
             SentenceData sentenceData = new SentenceData();
             sentenceData.initSentence(sentences.get(i));
 
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < 8; j++) {
                 if (keyWords[j] == null) {
                     break;
                 } else {
@@ -327,9 +334,16 @@ public class TLDR {
             relevantSentence.add(sentenceData);
         }
 
-        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+(totalRef/sentences.size())+"\n\n");
-        for (SentenceData x : relevantSentence) {
-            System.out.println(x.getSentence()+" | "+x.getReference()+"\n");
+        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+(totalRef/sentenceCount)+"\n\n");
+        avgRef = totalRef / sentenceCount;
+        for (i = 0; i < sentenceCount; i++) {
+            currRelevantRef = relevantSentence.get(i).getReference();
+            currRelevantSentence = relevantSentence.get(i).getSentence();
+
+            if (currRelevantRef > avgRef) {
+                System.out.println(currRelevantRef+" | "+currRelevantSentence);
+                summary.add(currRelevantSentence);
+            }
         }
 
     }
