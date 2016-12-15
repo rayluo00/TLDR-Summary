@@ -54,10 +54,12 @@ public class TLDR {
             substringStart = 3;
         }
 
-        titleCheck = currentSentence.substring((sentenceLength-substringStart), (sentenceLength));
-        for (String title : titleArray) {
-            if (titleCheck.equals(title)) {
-                return false;
+        if ((sentenceLength - substringStart) > 0) {
+            titleCheck = currentSentence.substring((sentenceLength - substringStart), (sentenceLength));
+            for (String title : titleArray) {
+                if (titleCheck.equals(title)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -86,7 +88,12 @@ public class TLDR {
         for (int i = 0; i < sentenceCount; i++) {
             currentSentence = currSentences.get(i);
             sentenceLength = currentSentence.length();
-            period_or_quote = currentSentence.charAt(sentenceLength-1);
+
+            if (sentenceLength == 0) {
+                period_or_quote = '\u0000';
+            } else {
+                period_or_quote = currentSentence.charAt(sentenceLength - 1);
+            }
 
             if (period_or_quote != '.' & period_or_quote != '"') {
                 currSentences.set(i, (currentSentence+="."));
@@ -251,12 +258,12 @@ public class TLDR {
                 "not", "on", "with", "he", "as", "you", "do", "at", "this", "but", "his",
                 "by", "from", "they", "we", "say", "her", "she", "or", "an", "my", "all",
                 "would", "there", "their", "what", "so", "if", "about", "who", "get",
-                "which", "go", "me" , "when", "make", "can", "like", "time", "no", "just",
+                "which", "go", "me" , "when", "make", "can", "like", "no", "just", "lt",
                 "him", "know", "take", "into", "your", "some", "could", "them", "see",
                 "other", "than", "then", "now", "look", "only", "come", "its", "over",
                 "also", "after", "use", "how", "our", "because", "any", "these", "us",
                 "was", "been", "has", "did", "many", "mrs", "mr", "said", "had", "you're",
-                "while", "ms", "dr", "lt"};
+                "while", "ms", "dr", "went"};
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
@@ -352,6 +359,8 @@ public class TLDR {
                 summary.add(currRelevantSentence);
             }*/
 
+            /**********************************************************************************/
+
             // Add the previous relevant sentence to give current sentence more context.
             if (currRelevantRef > avgRef && i > 0) {
                 tempSentence = relevantSentence.get(i-1).getSentence();
@@ -386,8 +395,9 @@ public class TLDR {
         ArrayList<String> sentences = new ArrayList<>();
         HashMap<String, Integer> articleData = new HashMap<>();
         //String website = "http://www.pcworld.com/article/3094797/analytics/googles-ai-is-learning-how-to-save-your-life.html";
-        String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
+        //String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
         //String website = "http://www.nytimes.com/2016/07/23/us/politics/tim-kaine-hillary-clinton-vice-president.html";
+        String website = "http://www.usatoday.com/story/tech/news/2016/07/05/google-deepmind-artificial-intelligence-ai-eye-disease-london-go-diabetes/86722906/";
 
         try {
             URL webURL = new URL(website);
