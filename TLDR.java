@@ -317,7 +317,7 @@ public class TLDR {
         for (i = 0; i < 8; i++) {
             if (wordArray[wordCount] != null) {
                 keyWords[i] = wordArray[wordCount--];
-                System.out.println(keyWords[i].getWordCount()+" | "+keyWords[i].getWord());
+                //System.out.println(keyWords[i].getWordCount()+" | "+keyWords[i].getWord());
             }
         }
 
@@ -347,7 +347,7 @@ public class TLDR {
         }
 
         avgRef = totalRef / sentenceCount;
-        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+avgRef);
+        //System.out.println("MAXREF: "+maxRef+" | AVGREF: "+avgRef);
         System.out.println("\n=========================== START SUMMARY ===========================");
 
         for (i = 0; i < sentenceCount; i++) {
@@ -380,7 +380,7 @@ public class TLDR {
             }
         }
 
-        System.out.println("============================ END SUMMARY ============================");
+        System.out.println("============================ END SUMMARY ============================\n");
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
         decreasePercentage = decreasePercentage / sentenceCount * 100;
@@ -410,10 +410,13 @@ public class TLDR {
             String title = webDoc.title();
             Elements webData = webDoc.select("p");
 
+            System.out.println("\n========================== START ARTICLE ==========================");
             for (Element p : webData) {
+                System.out.println(p.text());
                 formSentences(p.text(), sentences);
                 splitSentence(p.text(), article, articleData);
             }
+            System.out.println("=========================== END ARTICLE ===========================\n");
 
             arraySize = articleData.size();
             WordData[] wordArray = new WordData[arraySize];
