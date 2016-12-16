@@ -90,7 +90,8 @@ public class TLDR {
             sentenceLength = currentSentence.length();
 
             if (sentenceLength == 0) {
-                period_or_quote = '\u0000';
+                //period_or_quote = '\u0000';
+                continue;
             } else {
                 period_or_quote = currentSentence.charAt(sentenceLength - 1);
             }
@@ -263,7 +264,7 @@ public class TLDR {
                 "other", "than", "then", "now", "look", "only", "come", "its", "over",
                 "also", "after", "use", "how", "our", "because", "any", "these", "us",
                 "was", "been", "has", "did", "many", "mrs", "mr", "said", "had", "you're",
-                "while", "ms", "dr", "went"};
+                "while", "ms", "dr", "went", "\n", "\t"};
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
@@ -346,6 +347,7 @@ public class TLDR {
         }
 
         avgRef = totalRef / sentenceCount;
+        System.out.println("MAXREF: "+maxRef+" | AVGREF: "+avgRef);
         System.out.println("\n=========================== START SUMMARY ===========================");
 
         for (i = 0; i < sentenceCount; i++) {
@@ -366,11 +368,13 @@ public class TLDR {
                 tempSentence = relevantSentence.get(i-1).getSentence();
                 tempRelevantRef = relevantSentence.get(i-1).getReference();
                 if (tempRelevantRef >= 1 && !relevantSentence.get(i-1).getInSummary()) {
-                    System.out.println(tempRelevantRef+" | "+tempSentence);
+                    //System.out.println(tempRelevantRef+" | "+tempSentence);
+                    System.out.println(tempSentence);
                     summary.add(tempSentence);
                 }
 
-                System.out.println(currRelevantRef+" | "+currRelevantSentence);
+                //System.out.println(currRelevantRef+" | "+currRelevantSentence);
+                System.out.println(currRelevantSentence);
                 relevantSentence.get(i).setInSummaryTrue();
                 summary.add(currRelevantSentence);
             }
@@ -397,7 +401,8 @@ public class TLDR {
         //String website = "http://www.pcworld.com/article/3094797/analytics/googles-ai-is-learning-how-to-save-your-life.html";
         //String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
         //String website = "http://www.nytimes.com/2016/07/23/us/politics/tim-kaine-hillary-clinton-vice-president.html";
-        String website = "http://www.usatoday.com/story/tech/news/2016/07/05/google-deepmind-artificial-intelligence-ai-eye-disease-london-go-diabetes/86722906/";
+        String website = "https://techcrunch.com/2016/12/14/yahoo-discloses-hack-of-1-billion-accounts/";
+        //String website = "http://www.usatoday.com/story/tech/news/2016/07/05/google-deepmind-artificial-intelligence-ai-eye-disease-london-go-diabetes/86722906/";
 
         try {
             URL webURL = new URL(website);
