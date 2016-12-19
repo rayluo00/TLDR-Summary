@@ -384,7 +384,7 @@ public class TLDR {
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
         decreasePercentage = decreasePercentage / sentenceCount * 100;
-        System.out.format("PREV SIZE: %d | NEW SIZE: %d | COMPRESSION: %.2f", sentenceCount, summarySize, decreasePercentage);
+        System.out.format("PREV SIZE: %d | NEW SIZE: %d | COMPRESSION: %.2f\n", sentenceCount, summarySize, decreasePercentage);
     }
 
     /***********************************************************************************************
