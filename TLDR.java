@@ -316,7 +316,7 @@ public class TLDR {
 	while (textPerLine + 85 < documentBuilder.length() && 
 		(textPerLine = documentBuilder.lastIndexOf(" ", textPerLine + 85)) != -1) {
 
-		documentBuilder.replace(textPerLine, textPerLine + 1, "\n");	
+		documentBuilder.replace(textPerLine, textPerLine + 1, "\r\n");	
 	}
 
 	return documentBuilder;
@@ -389,7 +389,7 @@ public class TLDR {
         avgRef = totalRef / sentenceCount;
         //System.out.println("MAXREF: "+maxRef+" | AVGREF: "+avgRef);
         System.out.println("\n=========================== START SUMMARY ===========================");
-	WriteToFile("\n=========================== START SUMMARY ===========================\n");
+	WriteToFile("\r\n=========================== START SUMMARY ===========================\r\n");
 
         for (i = 0; i < sentenceCount; i++) {
             currRelevantRef = relevantSentence.get(i).getReference();
@@ -402,7 +402,7 @@ public class TLDR {
                 summary.add(currRelevantSentence);
             }*/
 
-            /**********************************************************************************/
+            /**************************************** OR ******************************************/
 
             // Add the previous relevant sentence to give current sentence more context.
             if (currRelevantRef > avgRef && i > 0) {
@@ -410,13 +410,11 @@ public class TLDR {
                 tempRelevantRef = relevantSentence.get(i-1).getReference();
                 if (tempRelevantRef >= 1 && !relevantSentence.get(i-1).getInSummary()) {
                     //System.out.println(tempRelevantRef+" | "+tempSentence);
-                    //System.out.println(tempSentence);
 		    summaryText += tempSentence;
                     summary.add(tempSentence);
                 }
 
                 //System.out.println(currRelevantRef+" | "+currRelevantSentence);
-                //System.out.println(currRelevantSentence);
 		summaryText += currRelevantSentence;
                 relevantSentence.get(i).setInSummaryTrue();
                 summary.add(currRelevantSentence);
@@ -428,13 +426,13 @@ public class TLDR {
 	System.out.println(summaryBuilder);
 	WriteToFile(summaryBuilder.toString());
         System.out.println("============================ END SUMMARY ============================\n");
-	WriteToFile("\n============================ END SUMMARY ============================\n");
+	WriteToFile("\r\n============================ END SUMMARY ============================\r\n");
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
         decreasePercentage = decreasePercentage / sentenceCount * 100;
-        stats = String.format("PREV : %d sentences | NEW : %d sentences | COMPRESSION: %.2f%%\n", 
+        stats = String.format("PREV : %d sentences | NEW : %d sentences | COMPRESSION: %.2f%%\r\n", 
 			sentenceCount, summarySize, decreasePercentage);
-	WriteToFile("\n"+stats+"\n");
+	WriteToFile("\r\n"+stats+"\r\n");
 	System.out.println(stats);
     }
 
@@ -444,6 +442,7 @@ public class TLDR {
      * summarize the article.
      */
     public static void main (String[] args) {
+
         int index = 0;
         int arraySize;
 	String websiteText = "";
@@ -452,14 +451,6 @@ public class TLDR {
         ArrayList<String> article = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
         HashMap<String, Integer> articleData = new HashMap<>();
-
-	// Test websites used to analyze the program.
-        //String website = "http://www.pcworld.com/article/3094797/analytics/googles-ai-is-learning-how-to-save-your-life.html";
-        //String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
-        //String website = "http://www.nytimes.com/2016/07/23/us/politics/tim-kaine-hillary-clinton-vice-president.html";
-        //String website = "https://techcrunch.com/2016/12/14/yahoo-discloses-hack-of-1-billion-accounts/";
-        //String website = "http://www.usatoday.com/story/tech/news/2016/07/05/google-deepmind-artificial-intelligence-ai-eye-disease-london-go-diabetes/86722906/";
-	//String website = "http://www.msn.com/en-us/money/markets/meet-the-chinese-billionaire-whos-moving-manufacturing-to-the-us-to-cut-costs/ar-BBxr39m?li=BBmkt5R&ocid=spartandhp";
 
 	try {
 	    Path deleteFilePath = Paths.get("tldr_output.txt");
@@ -479,9 +470,8 @@ public class TLDR {
             Elements webData = webDoc.select("p");
 
             System.out.println("\n============================ START ARTICLE ===========================");
-	    WriteToFile("============================ START ARTICLE ===========================\n");
+	    WriteToFile("============================ START ARTICLE ===========================\r\n");
             for (Element p : webData) {
-                //System.out.println(p.text());
 		websiteText += p.text();
                 FormSentences(p.text(), sentences);
                 SplitSentence(p.text(), article, articleData);
@@ -491,7 +481,7 @@ public class TLDR {
 	    System.out.println(articleBuilder);
 	    WriteToFile(articleBuilder.toString());
             System.out.println("============================= END ARTICLE ============================\n");
-	    WriteToFile("\n============================= END ARTICLE ============================\n");
+	    WriteToFile("\r\n============================= END ARTICLE ============================\r\n");
 
             arraySize = articleData.size();
             WordData[] wordArray = new WordData[arraySize];
@@ -506,8 +496,8 @@ public class TLDR {
             wordArray = RemoveCommonWords(wordArray, arraySize);
 
             FindRelevantSentences(sentences, wordArray);
-	    WriteToFile("WEBSITE: "+website+"\n");
-	    WriteToFile("TITLE: "+title+"\n\n");
+	    WriteToFile("WEBSITE: "+website+"\r\n");
+	    WriteToFile("TITLE: "+title+"\r\n");
 
 
         } catch (MalformedURLException e) {
