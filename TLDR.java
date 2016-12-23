@@ -419,17 +419,24 @@ public class TLDR {
         int arraySize;
 	String websiteText = "";
 	StringBuilder articleBuilder;
+	Scanner inputScanner = new Scanner(System.in);
         ArrayList<String> article = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
         HashMap<String, Integer> articleData = new HashMap<>();
+
+	// Test websites used to analyze the program.
         //String website = "http://www.pcworld.com/article/3094797/analytics/googles-ai-is-learning-how-to-save-your-life.html";
         //String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
         //String website = "http://www.nytimes.com/2016/07/23/us/politics/tim-kaine-hillary-clinton-vice-president.html";
         //String website = "https://techcrunch.com/2016/12/14/yahoo-discloses-hack-of-1-billion-accounts/";
         //String website = "http://www.usatoday.com/story/tech/news/2016/07/05/google-deepmind-artificial-intelligence-ai-eye-disease-london-go-diabetes/86722906/";
-	String website = "http://www.msn.com/en-us/money/markets/meet-the-chinese-billionaire-whos-moving-manufacturing-to-the-us-to-cut-costs/ar-BBxr39m?li=BBmkt5R&ocid=spartandhp";
+	//String website = "http://www.msn.com/en-us/money/markets/meet-the-chinese-billionaire-whos-moving-manufacturing-to-the-us-to-cut-costs/ar-BBxr39m?li=BBmkt5R&ocid=spartandhp";
 
         try {
+            System.out.print("Enter website url: ");
+	    String website = inputScanner.next();
+
+
             URL webURL = new URL(website);
             Document webDoc = Jsoup.parse(webURL, 3000);
             String title = webDoc.title();
