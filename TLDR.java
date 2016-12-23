@@ -333,7 +333,7 @@ public class TLDR {
         for (i = 0; i < 8; i++) {
             if (wordArray[wordCount] != null) {
                 keyWords[i] = wordArray[wordCount--];
-                System.out.println(keyWords[i].getWordCount()+" | "+keyWords[i].getWord());
+                //System.out.println(keyWords[i].getWordCount()+" | "+keyWords[i].getWord());
             }
         }
 
@@ -405,7 +405,8 @@ public class TLDR {
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
         decreasePercentage = decreasePercentage / sentenceCount * 100;
-        System.out.format("PREV SIZE: %d | NEW SIZE: %d | COMPRESSION: %.2f\n", sentenceCount, summarySize, decreasePercentage);
+        System.out.format("PREV : %d sentences | NEW : %d sentences | COMPRESSION: %.2f%%\n", 
+			sentenceCount, summarySize, decreasePercentage);
     }
 
     /***********************************************************************************************
