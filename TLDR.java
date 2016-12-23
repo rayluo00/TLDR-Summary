@@ -410,12 +410,12 @@ public class TLDR {
                 tempRelevantRef = relevantSentence.get(i-1).getReference();
                 if (tempRelevantRef >= 1 && !relevantSentence.get(i-1).getInSummary()) {
                     //System.out.println(tempRelevantRef+" | "+tempSentence);
-		    summaryText += tempSentence;
+		    summaryText += (tempSentence + " ");
                     summary.add(tempSentence);
                 }
 
                 //System.out.println(currRelevantRef+" | "+currRelevantSentence);
-		summaryText += currRelevantSentence;
+		summaryText += (currRelevantSentence + " ");
                 relevantSentence.get(i).setInSummaryTrue();
                 summary.add(currRelevantSentence);
             }
@@ -472,7 +472,7 @@ public class TLDR {
             System.out.println("\n============================ START ARTICLE ===========================");
 	    WriteToFile("============================ START ARTICLE ===========================\r\n");
             for (Element p : webData) {
-		websiteText += p.text();
+		websiteText += p.text()+" ";
                 FormSentences(p.text(), sentences);
                 SplitSentence(p.text(), article, articleData);
             }
