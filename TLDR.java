@@ -14,13 +14,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
 public class TLDR {
-
+ 
     /***********************************************************************************************
      * Return boolean to check if there is only a singular quote in the sentence.
      */
@@ -286,12 +291,30 @@ public class TLDR {
         return newWordArray;
     }
 
+    /**********************************************************************************************
+     * Write the document input into the given file. The file logs all the output from the console.
+     */
+    private static void WriteToFile (String document) {
+    	try {
+		PrintWriter docWriter = new PrintWriter(new FileWriter("tldr_output.txt", true));
+		docWriter.append(document);
+		docWriter.close();
+	
+	} catch (IOException e) {
+		System.out.println("ERROR: WriteToFile() unable to write document into file.");
+	}
+    }
+
+    /**********************************************************************************************
+     * Formats the given document to have at most 65 characters per line, wrap around the next line
+     * if the line is over 65 characters.
+     */
     private static StringBuilder FormatDocument (String document) {
 	int textPerLine = 0;
     	StringBuilder documentBuilder = new StringBuilder(document);
 
-	while (textPerLine + 65 < documentBuilder.length() && 
-		(textPerLine = documentBuilder.lastIndexOf(" ", textPerLine + 65)) != -1) {
+	while (textPerLine + 85 < documentBuilder.length() && 
+		(textPerLine = documentBuilder.lastIndexOf(" ", textPerLine + 85)) != -1) {
 
 		documentBuilder.replace(textPerLine, textPerLine + 1, "\n");	
 	}
@@ -316,6 +339,7 @@ public class TLDR {
         int tempRelevantRef;
         int currRelevantRef;
         float decreasePercentage;
+	String stats;
 	String summaryText = "";
         String tempSentence;
         String currRelevantSentence;
@@ -365,6 +389,7 @@ public class TLDR {
         avgRef = totalRef / sentenceCount;
         //System.out.println("MAXREF: "+maxRef+" | AVGREF: "+avgRef);
         System.out.println("\n=========================== START SUMMARY ===========================");
+	WriteToFile("\n=========================== START SUMMARY ===========================\n");
 
         for (i = 0; i < sentenceCount; i++) {
             currRelevantRef = relevantSentence.get(i).getReference();
@@ -401,12 +426,16 @@ public class TLDR {
 	summaryBuilder = FormatDocument(summaryText);
 
 	System.out.println(summaryBuilder);
+	WriteToFile(summaryBuilder.toString());
         System.out.println("============================ END SUMMARY ============================\n");
+	WriteToFile("\n============================ END SUMMARY ============================\n");
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
         decreasePercentage = decreasePercentage / sentenceCount * 100;
-        System.out.format("PREV : %d sentences | NEW : %d sentences | COMPRESSION: %.2f%%\n", 
+        stats = String.format("PREV : %d sentences | NEW : %d sentences | COMPRESSION: %.2f%%\n", 
 			sentenceCount, summarySize, decreasePercentage);
+	WriteToFile("\n"+stats+"\n");
+	System.out.println(stats);
     }
 
     /***********************************************************************************************
@@ -432,17 +461,25 @@ public class TLDR {
         //String website = "http://www.usatoday.com/story/tech/news/2016/07/05/google-deepmind-artificial-intelligence-ai-eye-disease-london-go-diabetes/86722906/";
 	//String website = "http://www.msn.com/en-us/money/markets/meet-the-chinese-billionaire-whos-moving-manufacturing-to-the-us-to-cut-costs/ar-BBxr39m?li=BBmkt5R&ocid=spartandhp";
 
+	try {
+	    Path deleteFilePath = Paths.get("tldr_output.txt");
+	    Files.delete(deleteFilePath);
+
+	} catch (IOException e) {
+	    System.out.println("ERROR: main() file is not found.");
+	}
+
         try {
             System.out.print("Enter website url: ");
 	    String website = inputScanner.next();
-
-
+	    
             URL webURL = new URL(website);
             Document webDoc = Jsoup.parse(webURL, 3000);
             String title = webDoc.title();
             Elements webData = webDoc.select("p");
 
-            System.out.println("\n========================== START ARTICLE ==========================");
+            System.out.println("\n============================ START ARTICLE ===========================");
+	    WriteToFile("============================ START ARTICLE ===========================\n");
             for (Element p : webData) {
                 //System.out.println(p.text());
 		websiteText += p.text();
@@ -452,7 +489,9 @@ public class TLDR {
 
 	    articleBuilder = FormatDocument(websiteText);
 	    System.out.println(articleBuilder);
-            System.out.println("=========================== END ARTICLE ===========================\n");
+	    WriteToFile(articleBuilder.toString());
+            System.out.println("============================= END ARTICLE ============================\n");
+	    WriteToFile("\n============================= END ARTICLE ============================\n");
 
             arraySize = articleData.size();
             WordData[] wordArray = new WordData[arraySize];
@@ -467,11 +506,14 @@ public class TLDR {
             wordArray = RemoveCommonWords(wordArray, arraySize);
 
             FindRelevantSentences(sentences, wordArray);
+	    WriteToFile("WEBSITE: "+website+"\n");
+	    WriteToFile("TITLE: "+title+"\n\n");
+
 
         } catch (MalformedURLException e) {
-            System.out.println("ERROR : Invalid URL.");
+            System.out.println("ERROR : main() invalid URL.");
         } catch (IOException e) {
-            System.out.println("ERROR : Unable to parse website.");
+            System.out.println("ERROR : main() unable to parse website.");
         }
     }
 }
