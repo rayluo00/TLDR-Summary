@@ -24,7 +24,7 @@ public class TLDR {
     /***********************************************************************************************
      * Return boolean to check if there is only a singular quote in the sentence.
      */
-    public static boolean checkMissingQuotes (String sentence) {
+    public static boolean CheckMissingQuotes (String sentence) {
         int sentenceLength = sentence.length();
         boolean completeQuote = true;
 
@@ -43,7 +43,7 @@ public class TLDR {
     /***********************************************************************************************
      * Return boolean to check if there's a title at the end.
      */
-    public static boolean checkSentenceWithTitles (String currentSentence, int sentenceLength) {
+    public static boolean CheckSentenceWithTitles (String currentSentence, int sentenceLength) {
         int substringStart;
         String titleCheck;
         String[] titleArray= {"Mr", " Mr", "Ms", " Ms", "Mrs", "Dr", " Dr", " Lt", "Lt"};
@@ -70,7 +70,7 @@ public class TLDR {
      * sentences that should match a quote. A quote can have multiple sentences,
      * but should be one relevant sentence. Then match error splits, (ie. Mr. or Mrs.).
      */
-    public static void formSentences (String webData, ArrayList<String> sentences) {
+    public static void FormSentences (String webData, ArrayList<String> sentences) {
         int sentenceCount;
         int sentenceLength;
         char period_or_quote;
@@ -81,7 +81,8 @@ public class TLDR {
         boolean fullQuote = true;
         boolean hasEndingTitle = false;
 
-        ArrayList<String> currSentences = new ArrayList<>(Arrays.asList(webData.split("((?<=[a-z])|(?<=[0-9]))\\.\\s+")));
+        ArrayList<String> currSentences = new ArrayList<>(Arrays.asList
+			(webData.split("((?<=[a-z])|(?<=[0-9]))\\.\\s+")));
 
         sentenceCount = currSentences.size();
 
@@ -101,7 +102,7 @@ public class TLDR {
             }
 
             // Combine split quotes.
-            if (!checkMissingQuotes(currentSentence)) {
+            if (!CheckMissingQuotes(currentSentence)) {
                 if (fullQuote) {
                     sentence = currentSentence;
                     currSentences.set(i, "");
@@ -121,7 +122,7 @@ public class TLDR {
             }
 
             // Combine sentences ending with titles. Ex. Mr. Smith, Dr. Smith, Mrs. Smith
-            if (!checkSentenceWithTitles(currentSentence, sentenceLength)) {
+            if (!CheckSentenceWithTitles(currentSentence, sentenceLength)) {
                 if (!hasEndingTitle) {
                     titleSentence = currentSentence;
                     currSentences.set(i, "");
@@ -134,7 +135,7 @@ public class TLDR {
             else if (hasEndingTitle) {
                 currSentences.set(i, "");
                 titleSentence += " "+currentSentence;
-                if (checkSentenceWithTitles(titleSentence, titleSentence.length())) {
+                if (CheckSentenceWithTitles(titleSentence, titleSentence.length())) {
                     hasEndingTitle = false;
                     currSentences.add(titleSentence);
                 }
@@ -154,7 +155,7 @@ public class TLDR {
     /***********************************************************************************************
      * Split the sentences in an article to get the words used and how often the words are used.
      */
-    public static void splitSentence (String sentence, ArrayList<String> article,
+    public static void SplitSentence (String sentence, ArrayList<String> article,
                                       HashMap<String, Integer> articleData) {
 
         ArrayList<String> sentenceList = new ArrayList<>(Arrays.asList(
@@ -178,7 +179,7 @@ public class TLDR {
     /***********************************************************************************************
      * Swap the WordData object in the array from the OLD position to the NEW position.
      */
-    private static void swap (WordData[] wordArray, int OLD, int NEW) {
+    private static void Swap (WordData[] wordArray, int OLD, int NEW) {
         WordData temp;
 
         temp = wordArray[OLD];
@@ -190,30 +191,30 @@ public class TLDR {
      * Partition the array for quicksort and swap the pivot (i) with the current index (j) if
      * the current index is less than the pivot.
      */
-    private static int partition (WordData[] wordArray, int low, int high) {
+    private static int Partition (WordData[] wordArray, int low, int high) {
         int i = low;
         int pivot = wordArray[high].getWordCount();
 
         for (int j = low; j <= high-1; j++) {
             if (wordArray[j].getWordCount() <= pivot) {
-                swap(wordArray, i, j);
+                Swap(wordArray, i, j);
                 i++;
             }
         }
-        swap(wordArray, i, high);
+        Swap(wordArray, i, high);
         return i;
     }
 
     /***********************************************************************************************
      * Perform quicksort algorithm to sort the words by increasing reference to the word.
      */
-    private static void quicksort (WordData[] wordArray, int low, int high) {
+    private static void Quicksort (WordData[] wordArray, int low, int high) {
         int pivot;
 
         if (low < high) {
-            pivot = partition(wordArray, low, high);
-            quicksort(wordArray, low, pivot-1);
-            quicksort(wordArray, pivot+1, high);
+            pivot = Partition(wordArray, low, high);
+            Quicksort(wordArray, low, pivot-1);
+            Quicksort(wordArray, pivot+1, high);
         }
     }
 
@@ -221,7 +222,7 @@ public class TLDR {
      * Retrieve relevant data from the wordArray which contains all words used in the
      * article using slope to remove words that doesn't specify the topic of the article.
      */
-    public static WordData[] computeSlopeRelevance (WordData[] wordArray, int arraySize) {
+    public static WordData[] ComputeSlopeRelevance (WordData[] wordArray, int arraySize) {
         int slope;
         int index = 0;
         boolean relevantDataFlag = false;
@@ -249,7 +250,7 @@ public class TLDR {
      * very frequently and will interfere with the relevance comparisons with other commonly
      * used words from the article that can help summarize the given article.
      */
-    public static WordData[] removeCommonWords (WordData[] wordArray, int arraySize) {
+    public static WordData[] RemoveCommonWords (WordData[] wordArray, int arraySize) {
         int index = 0;
         int commonWordCount;
         String word;
@@ -264,7 +265,7 @@ public class TLDR {
                 "other", "than", "then", "now", "look", "only", "come", "its", "over",
                 "also", "after", "use", "how", "our", "because", "any", "these", "us",
                 "was", "been", "has", "did", "many", "mrs", "mr", "said", "had", "you're",
-                "while", "ms", "dr", "went", "\n", "\t"};
+                "while", "ms", "dr", "went", "\n", "\t", "is"};
 
         commonWordCount = commonWords.length;
         for (int i = 0; i < arraySize; i++) {
@@ -285,12 +286,25 @@ public class TLDR {
         return newWordArray;
     }
 
+    private static StringBuilder FormatDocument (String document) {
+	int textPerLine = 0;
+    	StringBuilder documentBuilder = new StringBuilder(document);
+
+	while (textPerLine + 65 < documentBuilder.length() && 
+		(textPerLine = documentBuilder.lastIndexOf(" ", textPerLine + 65)) != -1) {
+
+		documentBuilder.replace(textPerLine, textPerLine + 1, "\n");	
+	}
+
+	return documentBuilder;
+    }
+
     /**********************************************************************************************
      * Using the most relevant words in the wordArray, choose the top words that are the most
      * relevant and rank each sentence based on the relevance of the word to retrieve sentences
      * that gives main ideas of the article.
      */
-    private static void findRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
+    private static void FindRelevantSentences (ArrayList<String> sentences, WordData[] wordArray) {
         int i;
         int avgRef;
         int maxRef = 0;
@@ -302,8 +316,10 @@ public class TLDR {
         int tempRelevantRef;
         int currRelevantRef;
         float decreasePercentage;
+	String summaryText = "";
         String tempSentence;
         String currRelevantSentence;
+	StringBuilder summaryBuilder;
         WordData[] keyWords = new WordData[8];
         ArrayList<SentenceData> relevantSentence = new ArrayList<>();
         ArrayList<String> summary = new ArrayList<>();
@@ -317,7 +333,7 @@ public class TLDR {
         for (i = 0; i < 8; i++) {
             if (wordArray[wordCount] != null) {
                 keyWords[i] = wordArray[wordCount--];
-                //System.out.println(keyWords[i].getWordCount()+" | "+keyWords[i].getWord());
+                System.out.println(keyWords[i].getWordCount()+" | "+keyWords[i].getWord());
             }
         }
 
@@ -369,17 +385,22 @@ public class TLDR {
                 tempRelevantRef = relevantSentence.get(i-1).getReference();
                 if (tempRelevantRef >= 1 && !relevantSentence.get(i-1).getInSummary()) {
                     //System.out.println(tempRelevantRef+" | "+tempSentence);
-                    System.out.println(tempSentence);
+                    //System.out.println(tempSentence);
+		    summaryText += tempSentence;
                     summary.add(tempSentence);
                 }
 
                 //System.out.println(currRelevantRef+" | "+currRelevantSentence);
-                System.out.println(currRelevantSentence);
+                //System.out.println(currRelevantSentence);
+		summaryText += currRelevantSentence;
                 relevantSentence.get(i).setInSummaryTrue();
                 summary.add(currRelevantSentence);
             }
         }
 
+	summaryBuilder = FormatDocument(summaryText);
+
+	System.out.println(summaryBuilder);
         System.out.println("============================ END SUMMARY ============================\n");
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
@@ -395,14 +416,17 @@ public class TLDR {
     public static void main (String[] args) {
         int index = 0;
         int arraySize;
+	String websiteText = "";
+	StringBuilder articleBuilder;
         ArrayList<String> article = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
         HashMap<String, Integer> articleData = new HashMap<>();
         //String website = "http://www.pcworld.com/article/3094797/analytics/googles-ai-is-learning-how-to-save-your-life.html";
         //String website = "http://www.nytimes.com/2016/07/22/business/media/roger-ailes-fox-news.html?_r=0";
         //String website = "http://www.nytimes.com/2016/07/23/us/politics/tim-kaine-hillary-clinton-vice-president.html";
-        String website = "https://techcrunch.com/2016/12/14/yahoo-discloses-hack-of-1-billion-accounts/";
+        //String website = "https://techcrunch.com/2016/12/14/yahoo-discloses-hack-of-1-billion-accounts/";
         //String website = "http://www.usatoday.com/story/tech/news/2016/07/05/google-deepmind-artificial-intelligence-ai-eye-disease-london-go-diabetes/86722906/";
+	String website = "http://www.msn.com/en-us/money/markets/meet-the-chinese-billionaire-whos-moving-manufacturing-to-the-us-to-cut-costs/ar-BBxr39m?li=BBmkt5R&ocid=spartandhp";
 
         try {
             URL webURL = new URL(website);
@@ -412,10 +436,14 @@ public class TLDR {
 
             System.out.println("\n========================== START ARTICLE ==========================");
             for (Element p : webData) {
-                System.out.println(p.text());
-                formSentences(p.text(), sentences);
-                splitSentence(p.text(), article, articleData);
+                //System.out.println(p.text());
+		websiteText += p.text();
+                FormSentences(p.text(), sentences);
+                SplitSentence(p.text(), article, articleData);
             }
+
+	    articleBuilder = FormatDocument(websiteText);
+	    System.out.println(articleBuilder);
             System.out.println("=========================== END ARTICLE ===========================\n");
 
             arraySize = articleData.size();
@@ -426,11 +454,11 @@ public class TLDR {
                 wordArray[index++] = currentWord;
             }
 
-            quicksort(wordArray, 0, articleData.size()-1);
-            wordArray = computeSlopeRelevance(wordArray, arraySize);
-            wordArray = removeCommonWords(wordArray, arraySize);
+            Quicksort(wordArray, 0, articleData.size()-1);
+            wordArray = ComputeSlopeRelevance(wordArray, arraySize);
+            wordArray = RemoveCommonWords(wordArray, arraySize);
 
-            findRelevantSentences(sentences, wordArray);
+            FindRelevantSentences(sentences, wordArray);
 
         } catch (MalformedURLException e) {
             System.out.println("ERROR : Invalid URL.");
