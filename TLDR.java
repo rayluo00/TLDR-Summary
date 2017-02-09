@@ -300,9 +300,9 @@ public class TLDR {
 		docWriter.append(document);
 		docWriter.close();
 	
-	} catch (IOException e) {
-		System.out.println("ERROR: WriteToFile() unable to write document into file.");
-	}
+		} catch (IOException e) {
+			System.out.println("ERROR: WriteToFile() unable to write document into file.");
+		}
     }
 
     /**********************************************************************************************
@@ -310,16 +310,16 @@ public class TLDR {
      * if the line is over 65 characters.
      */
     private static StringBuilder FormatDocument (String document) {
-	int textPerLine = 0;
+		int textPerLine = 0;
     	StringBuilder documentBuilder = new StringBuilder(document);
 
-	while (textPerLine + 85 < documentBuilder.length() && 
-		(textPerLine = documentBuilder.lastIndexOf(" ", textPerLine + 85)) != -1) {
+		while (textPerLine + 85 < documentBuilder.length() && 
+			(textPerLine = documentBuilder.lastIndexOf(" ", textPerLine + 85)) != -1) {
 
-		documentBuilder.replace(textPerLine, textPerLine + 1, "\r\n");	
-	}
+			documentBuilder.replace(textPerLine, textPerLine + 1, "\r\n");	
+		}
 
-	return documentBuilder;
+		return documentBuilder;
     }
 
     /**********************************************************************************************
@@ -339,11 +339,11 @@ public class TLDR {
         int tempRelevantRef;
         int currRelevantRef;
         float decreasePercentage;
-	String stats;
-	String summaryText = "";
+		String stats;
+		String summaryText = "";
         String tempSentence;
         String currRelevantSentence;
-	StringBuilder summaryBuilder;
+		StringBuilder summaryBuilder;
         WordData[] keyWords = new WordData[8];
         ArrayList<SentenceData> relevantSentence = new ArrayList<>();
         ArrayList<String> summary = new ArrayList<>();
@@ -389,7 +389,7 @@ public class TLDR {
         avgRef = totalRef / sentenceCount;
         //System.out.println("MAXREF: "+maxRef+" | AVGREF: "+avgRef);
         System.out.println("\n=========================== START SUMMARY ===========================");
-	WriteToFile("\r\n=========================== START SUMMARY ===========================\r\n");
+		WriteToFile("\r\n=========================== START SUMMARY ===========================\r\n");
 
         for (i = 0; i < sentenceCount; i++) {
             currRelevantRef = relevantSentence.get(i).getReference();
@@ -408,32 +408,35 @@ public class TLDR {
             if (currRelevantRef > avgRef && i > 0) {
                 tempSentence = relevantSentence.get(i-1).getSentence();
                 tempRelevantRef = relevantSentence.get(i-1).getReference();
+
                 if (tempRelevantRef >= 1 && !relevantSentence.get(i-1).getInSummary()) {
                     //System.out.println(tempRelevantRef+" | "+tempSentence);
-		    summaryText += (tempSentence + " ");
+		    		summaryText += (tempSentence + " ");
                     summary.add(tempSentence);
                 }
 
                 //System.out.println(currRelevantRef+" | "+currRelevantSentence);
-		summaryText += (currRelevantSentence + " ");
+				summaryText += (currRelevantSentence + " ");
                 relevantSentence.get(i).setInSummaryTrue();
                 summary.add(currRelevantSentence);
             }
         }
 
-	summaryBuilder = FormatDocument(summaryText);
+		summaryBuilder = FormatDocument(summaryText);
 
-	System.out.println(summaryBuilder);
-	WriteToFile(summaryBuilder.toString());
+		System.out.println(summaryBuilder);
+		WriteToFile(summaryBuilder.toString());
         System.out.println("============================ END SUMMARY ============================\n");
-	WriteToFile("\r\n============================ END SUMMARY ============================\r\n");
+		WriteToFile("\r\n============================ END SUMMARY ============================\r\n");
+
         summarySize = summary.size();
         decreasePercentage = sentenceCount - summarySize;
         decreasePercentage = decreasePercentage / sentenceCount * 100;
         stats = String.format("PREV : %d sentences | NEW : %d sentences | COMPRESSION: %.2f%%\r\n", 
-			sentenceCount, summarySize, decreasePercentage);
-	WriteToFile("\r\n"+stats+"\r\n");
-	System.out.println(stats);
+		sentenceCount, summarySize, decreasePercentage);
+
+		WriteToFile("\r\n"+stats+"\r\n");
+		System.out.println(stats);
     }
 
     /***********************************************************************************************
@@ -445,9 +448,9 @@ public class TLDR {
 
         int index = 0;
         int arraySize;
-	String websiteText = "";
-	StringBuilder articleBuilder;
-	Scanner inputScanner = new Scanner(System.in);
+		String websiteText = "";
+		StringBuilder articleBuilder;
+		Scanner inputScanner = new Scanner(System.in);
         ArrayList<String> article = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
         HashMap<String, Integer> articleData = new HashMap<>();
@@ -462,7 +465,7 @@ public class TLDR {
 
         try {
             System.out.print("Enter website url: ");
-	    String website = inputScanner.next();
+	    	String website = inputScanner.next();
 	    
             URL webURL = new URL(website);
             Document webDoc = Jsoup.parse(webURL, 3000);
@@ -470,18 +473,19 @@ public class TLDR {
             Elements webData = webDoc.select("p");
 
             System.out.println("\n============================ START ARTICLE ===========================");
-	    WriteToFile("============================ START ARTICLE ===========================\r\n");
+	    	WriteToFile("============================ START ARTICLE ===========================\r\n");
+
             for (Element p : webData) {
-		websiteText += p.text()+" ";
+				websiteText += p.text()+" ";
                 FormSentences(p.text(), sentences);
                 SplitSentence(p.text(), article, articleData);
             }
 
-	    articleBuilder = FormatDocument(websiteText);
-	    System.out.println(articleBuilder);
-	    WriteToFile(articleBuilder.toString());
+			articleBuilder = FormatDocument(websiteText);
+			System.out.println(articleBuilder);
+	    	WriteToFile(articleBuilder.toString());
             System.out.println("============================= END ARTICLE ============================\n");
-	    WriteToFile("\r\n============================= END ARTICLE ============================\r\n");
+			WriteToFile("\r\n============================= END ARTICLE ============================\r\n");
 
             arraySize = articleData.size();
             WordData[] wordArray = new WordData[arraySize];
@@ -496,9 +500,8 @@ public class TLDR {
             wordArray = RemoveCommonWords(wordArray, arraySize);
 
             FindRelevantSentences(sentences, wordArray);
-	    WriteToFile("WEBSITE: "+website+"\r\n");
-	    WriteToFile("TITLE: "+title+"\r\n");
-
+			WriteToFile("WEBSITE: "+website+"\r\n");
+			WriteToFile("TITLE: "+title+"\r\n");
 
         } catch (MalformedURLException e) {
             System.out.println("ERROR : main() invalid URL.");
