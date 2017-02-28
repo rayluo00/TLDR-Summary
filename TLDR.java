@@ -295,10 +295,10 @@ public class TLDR {
      * Write the document input into the given file. The file logs all the output from the console.
      */
     private static void WriteToFile (String document) {
-    	try {
-		PrintWriter docWriter = new PrintWriter(new FileWriter("tldr_output.txt", true));
-		docWriter.append(document);
-		docWriter.close();
+		try {
+			PrintWriter docWriter = new PrintWriter(new FileWriter("tldr_output.txt", true));
+			docWriter.append(document);
+			docWriter.close();
 	
 		} catch (IOException e) {
 			System.out.println("ERROR: WriteToFile() unable to write document into file.");
@@ -311,7 +311,7 @@ public class TLDR {
      */
     private static StringBuilder FormatDocument (String document) {
 		int textPerLine = 0;
-    	StringBuilder documentBuilder = new StringBuilder(document);
+		StringBuilder documentBuilder = new StringBuilder(document);
 
 		while (textPerLine + 85 < documentBuilder.length() && 
 			(textPerLine = documentBuilder.lastIndexOf(" ", textPerLine + 85)) != -1) {
@@ -411,7 +411,7 @@ public class TLDR {
 
                 if (tempRelevantRef >= 1 && !relevantSentence.get(i-1).getInSummary()) {
                     //System.out.println(tempRelevantRef+" | "+tempSentence);
-		    		summaryText += (tempSentence + " ");
+					summaryText += (tempSentence + " ");
                     summary.add(tempSentence);
                 }
 
@@ -444,8 +444,7 @@ public class TLDR {
      * all the required functions needed to sort and compute the relevant words needed to
      * summarize the article.
      */
-    public static void main (String[] args) {
-
+	public static void main (String[] args) {
         int index = 0;
         int arraySize;
 		String websiteText = "";
@@ -454,59 +453,59 @@ public class TLDR {
         ArrayList<String> article = new ArrayList<>();
         ArrayList<String> sentences = new ArrayList<>();
         HashMap<String, Integer> articleData = new HashMap<>();
+		
+		try {
+			Path deleteFilePath = Paths.get("tldr_output.txt");
+			Files.delete(deleteFilePath);
 
-	try {
-	    Path deleteFilePath = Paths.get("tldr_output.txt");
-	    Files.delete(deleteFilePath);
+		} catch (IOException e) {
+			System.out.println("ERROR: main() file is not found.");
+		}
 
-	} catch (IOException e) {
-	    System.out.println("ERROR: main() file is not found.");
-	}
+		try {
+				System.out.print("Enter website url: ");
+				String website = inputScanner.next();
+		
+			URL webURL = new URL(website);
+			Document webDoc = Jsoup.parse(webURL, 3000);
+			String title = webDoc.title();
+			Elements webData = webDoc.select("p");
 
-        try {
-            System.out.print("Enter website url: ");
-	    	String website = inputScanner.next();
-	    
-            URL webURL = new URL(website);
-            Document webDoc = Jsoup.parse(webURL, 3000);
-            String title = webDoc.title();
-            Elements webData = webDoc.select("p");
+			System.out.println("\n============================ START ARTICLE ===========================");
+			WriteToFile("============================ START ARTICLE ===========================\r\n");
 
-            System.out.println("\n============================ START ARTICLE ===========================");
-	    	WriteToFile("============================ START ARTICLE ===========================\r\n");
-
-            for (Element p : webData) {
+			for (Element p : webData) {
 				websiteText += p.text()+" ";
-                FormSentences(p.text(), sentences);
-                SplitSentence(p.text(), article, articleData);
-            }
+				FormSentences(p.text(), sentences);
+				SplitSentence(p.text(), article, articleData);
+			}
 
 			articleBuilder = FormatDocument(websiteText);
 			System.out.println(articleBuilder);
-	    	WriteToFile(articleBuilder.toString());
-            System.out.println("============================= END ARTICLE ============================\n");
+			WriteToFile(articleBuilder.toString());
+			System.out.println("============================= END ARTICLE ============================\n");
 			WriteToFile("\r\n============================= END ARTICLE ============================\r\n");
 
-            arraySize = articleData.size();
-            WordData[] wordArray = new WordData[arraySize];
+			arraySize = articleData.size();
+			WordData[] wordArray = new WordData[arraySize];
 
-            for (String w : articleData.keySet()) {
-                WordData currentWord = new WordData(w, articleData.get(w));
-                wordArray[index++] = currentWord;
-            }
+			for (String w : articleData.keySet()) {
+				WordData currentWord = new WordData(w, articleData.get(w));
+				wordArray[index++] = currentWord;
+			}
 
-            Quicksort(wordArray, 0, articleData.size()-1);
-            wordArray = ComputeSlopeRelevance(wordArray, arraySize);
-            wordArray = RemoveCommonWords(wordArray, arraySize);
+			Quicksort(wordArray, 0, articleData.size()-1);
+			wordArray = ComputeSlopeRelevance(wordArray, arraySize);
+			wordArray = RemoveCommonWords(wordArray, arraySize);
 
-            FindRelevantSentences(sentences, wordArray);
+			FindRelevantSentences(sentences, wordArray);
 			WriteToFile("WEBSITE: "+website+"\r\n");
 			WriteToFile("TITLE: "+title+"\r\n");
 
-        } catch (MalformedURLException e) {
-            System.out.println("ERROR : main() invalid URL.");
-        } catch (IOException e) {
-            System.out.println("ERROR : main() unable to parse website.");
-        }
-    }
+		} catch (MalformedURLException e) {
+				System.out.println("ERROR : main() invalid URL.");
+		} catch (IOException e) {
+				System.out.println("ERROR : main() unable to parse website.");
+		}
+	}
 }
