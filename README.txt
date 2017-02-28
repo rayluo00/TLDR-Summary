@@ -24,3 +24,56 @@ actual sentences and titles (e.g., Mr., Ms., Mrs., Dr., PhD., etc...). It will c
 words that are relevant and added to an ArrayList to find relevant words for sentence 
 combinations. A text file named 'tldr_output.txt' will be made to log the original news 
 article and the new summary.
+
+----------------------------------------------------------------------------------------------
+                                     SAMPLE OUTPUT
+----------------------------------------------------------------------------------------------
+============================ START ARTICLE ===========================
+While it has been said for a long time that the U.S. is bleeding manufacturing jobs
+overseas, particularly to China, some businesses have been moving operations the
+other way round. GM And now, the head of a leading Chinese glass maker making the
+same move has openly questioned if his country really is such a lucrative
+destination for offshore factories, reports Hong Kong newspaper the South China
+Morning Post. Overall speaking, the tax burden for manufacturers in China is 35%
+higher than in the U.S., Cao Dewang told China Business Network in an interview. He
+added that a combination of cheap land, reasonable energy prices and other
+incentives means that, despite higher manufacturing costs, he can still make more
+money by making glass in the U.S. than by exporting Chinese-made panes to the U.S.
+market. His company, Fuyao Glass, has invested over $1 billion stateside, according
+to the Post, the most significant move of which is opening its U.S. factory in the
+Ohio town of Moraine, a suburb of Dayton, back in October. The glass maker is
+re-purposing the town's former General Motors assembly that had been standing empty
+since late 2008, as the Dayton Daily News reports. According to Ohio TV station
+WDTN, the plant now employs a workforce of almost 2,000, and Cao expects that the
+fully operational facility will employ up to 3,000 workers. Wage and transportation
+costs are getting higher in China, Cao says. Compared with four years ago, labor
+wages [in China] today have tripled, he told China Business Network. Meanwhile,
+transportation in the U.S. costs the equivalent of less than one yuan ($) per
+kilometer, while road tolls [in China] are higher, he added, pointing out that some
+mid- and small-sized Chinese enterprises have already started moving to Southeast
+Asian countries like Vietnam and Cambodia for cheaper wages and materials. Fuyao is
+not the first Chinese business making the move across the Pacific in recent years.
+According to the Wall Street Journal, Chinese companies invested over $20 billion
+in the U.S. last year -from a practically nonexistent total investment back in
+2006. And yet, it would probably be mistaken to write off the world's second
+largest economy as a manufacturing powerhouse once and for all. As Fortune reported
+in early December, the latest data indicates that China's manufacturing sector is
+in its strongest position in some years, buttressing the country's economic growth
+along the way.  
+============================= END ARTICLE ============================
+
+=========================== START SUMMARY ===========================
+And now, the head of a leading Chinese glass maker making the same move has openly
+questioned if his country really is such a lucrative destination for offshore
+factories, reports Hong Kong newspaper the South China Morning Post. Overall
+speaking, the tax burden for manufacturers in China is 35% higher than in the U.S.,
+Cao Dewang told China Business Network in an interview. He added that a combination
+of cheap land, reasonable energy prices and other incentives means that, despite
+higher manufacturing costs, he can still make more money by making glass in the
+U.S. than by exporting Chinese-made panes to the U.S. market. 
+============================ END SUMMARY ============================
+
+PREV : 15 sentences | NEW : 3 sentences | COMPRESSION: 80.00%
+
+WEBSITE: http://www.msn.com/en-us/money/markets/meet-the-chinese-billionaire-whos-moving-manufacturing-to-the-us-to-cut-costs/ar-BBxr39m?li=BBmkt5R&ocid=spartandhp
+TITLE: Meet the Chinese Billionaire Who's Moving Manufacturing to the U.S. to Cut Costs
