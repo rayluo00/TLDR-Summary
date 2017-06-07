@@ -1,0 +1,13 @@
+.input_field {
+	position: fixed;
+	left: 50%;
+	top: 40%;
+	border-style: solid;
+	transform: translate(-50%);
+	font-size: 25px;
+}
+
+.url_input {
+	margin-left: 10px;
+	font-size: 25px;
+}
