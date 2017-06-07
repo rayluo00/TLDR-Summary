@@ -15,13 +15,16 @@ class TLDR extends Component {
 		var $ = require('jquery');
 		var inputUrl = event.target.value;
 		this.setState({url: inputUrl});
+		var json_data = {'url': this.state.url}
 
 		console.log('POSTing');
 		$.ajax({
 			type: 'POST',
+			contentType: 'application/json',
 			headers: 'Access-Control-Allow-Origin',
 			url: 'http://localhost:5000/',
-			data: this.state.url
+			dataType: 'json',
+			data: JSON.stringify(json_data)
 		});
 	}
 

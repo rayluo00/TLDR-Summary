@@ -17,8 +17,8 @@ app = Flask(__name__)
 CORS(app)
 
 #####################################################################
-def main ():
-	content = get_html()
+def main (jsdata):
+	content = get_html(jsdata)
 	sentences = split_sentences(content)
 	bag_of_words = create_word_bag(content)
 
@@ -33,14 +33,15 @@ def main ():
 							reverse=True)
 
 	for s in sorted_sent:
-		print(s.sentence,'\n\n')
+		print(s.sentence,'\n\n', file=sys.stderr)
 
-@app.route('/', methods=['GET', 'POST'])
+#####################################################################
+@app.route('/', methods=['POST'])
 def post_data ():
 	if request.method == 'POST':
-		print('\nPOST: ',request.form,'\n', file=sys.stderr)
-	elif request.method == 'GET':
-		print('\nGOT: ',request.form,'\n', file=sys.stderr)
+		jsdata = request.get_json()
+		print('\nPOST: ',jsdata['url'],'\n', file=sys.stderr)
+		main(jsdata)
 
 	return 'done'
 
@@ -70,10 +71,11 @@ def create_word_bag (sentence):
 	return word_bag
 
 #####################################################################
-def get_html ():
+def get_html (jsdata):
 	content = []
 
-	url = input('Website URL: ')
+	#url = input('Website URL: ')
+	url = jsdata['url']
 	html_page = urllib.request.urlopen(url)
 	data = html_page.read().decode('utf-8')
 	html_page.close()
@@ -87,4 +89,5 @@ def get_html ():
 	return ''.join(content)
 
 if __name__ == '__main__':
+	#main()
 	app.run(host='0.0.0.0')
