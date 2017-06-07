@@ -1,3 +1,4 @@
+from __future__ import print_function
 import nltk.data
 import string
 from nltk.corpus import stopwords
@@ -7,6 +8,13 @@ import urllib.request
 from bs4 import BeautifulSoup
 from sentence_data import SentenceData
 from sentence_data import word_count
+from flask import Flask, request, render_template
+import json
+import sys
+from flask_cors import CORS, cross_origin
+
+app = Flask(__name__)
+CORS(app)
 
 #####################################################################
 def main ():
@@ -26,6 +34,15 @@ def main ():
 
 	for s in sorted_sent:
 		print(s.sentence,'\n\n')
+
+@app.route('/', methods=['GET', 'POST'])
+def post_data ():
+	if request.method == 'POST':
+		print('\nPOST: ',request.form,'\n', file=sys.stderr)
+	elif request.method == 'GET':
+		print('\nGOT: ',request.form,'\n', file=sys.stderr)
+
+	return 'done'
 
 #####################################################################
 def split_sentences (content):
@@ -70,4 +87,4 @@ def get_html ():
 	return ''.join(content)
 
 if __name__ == '__main__':
-	main()
+	app.run(host='0.0.0.0')
