@@ -8,13 +8,14 @@ import urllib.request
 from bs4 import BeautifulSoup
 from sentence_data import SentenceData
 from sentence_data import word_count
-from flask import Flask, request, render_template
-import json
+from flask import Flask, request, render_template, jsonify, json, Response
 import sys
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
+
+summary = ''
 
 #####################################################################
 def main (jsdata):
@@ -32,18 +33,30 @@ def main (jsdata):
 	sorted_sent = sorted(sentences, key=lambda x: x.percentage, 
 							reverse=True)
 
+	summary = ''
 	for s in sorted_sent:
-		print(s.sentence,'\n\n', file=sys.stderr)
+		#print(s.sentence,'\n\n', file=sys.stderr)
+		summary += (s.sentence + ' ')
+
+	return summary
 
 #####################################################################
 @app.route('/', methods=['POST'])
-def post_data ():
+def get_post_data ():
+	global summary
+
 	if request.method == 'POST':
 		jsdata = request.get_json()
 		print('\nPOST: ',jsdata['url'],'\n', file=sys.stderr)
-		main(jsdata)
+		summary = main(jsdata)
 
 	return 'done'
+
+@app.route('/getmethod', methods=['GET'])
+def ajax ():
+	global summary
+	print('\nGET: SEND\n', file=sys.stderr)
+	return Response(json.dumps(summary))
 
 #####################################################################
 def split_sentences (content):
