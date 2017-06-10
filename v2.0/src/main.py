@@ -34,9 +34,13 @@ def main (jsdata):
 							reverse=True)
 
 	summary = ''
+	i = 0
 	for s in sorted_sent:
+		if i > 7:
+			break
 		#print(s.sentence,'\n\n', file=sys.stderr)
 		summary += (s.sentence + ' ')
+		i += 1
 
 	return summary
 
