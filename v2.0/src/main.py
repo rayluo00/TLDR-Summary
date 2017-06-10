@@ -24,11 +24,10 @@ def main (jsdata):
 	bag_of_words = create_word_bag(content)
 
 	total_wordc = word_count(bag_of_words)
-	#print(total_wordc)
+	print(sorted(bag_of_words.items(), key=lambda x: x[1], reverse=True), file=sys.stderr)
 
 	for sent in sentences:
 		sent.calc_percentage(total_wordc, bag_of_words)
-		#print(sent.percentage,'|',sent.sentence,'\n\n')
 	
 	sorted_sent = sorted(sentences, key=lambda x: x.percentage, 
 							reverse=True)

@@ -1,11 +1,8 @@
 #####################################################################
 class SentenceData (object):
 	def __init__ (self):
-		# {'word': # count}
-		self.words = None
-		# 'sentence'
-		self.sentence = None
-		self.rank = 0
+		self.words = None      # dict{'word' : # count}
+		self.sentence = None   # 'string sentence'
 		self.percentage = 0.0
 
 	def calc_percentage (self, total_wordc, bag_of_words):
