@@ -72,6 +72,7 @@ def split_sentences (content):
 		data.sentence = sent
 		data.words = create_word_bag(sent)
 		sentences.append(data)
+		print(data.sentence,'\n\n')
 
 	return sentences
 
@@ -92,13 +93,16 @@ def get_html (jsdata):
 
 	#url = input('Website URL: ')
 	url = jsdata['url']
+	url += ''
 	html_page = urllib.request.urlopen(url)
 	data = html_page.read().decode('utf-8')
 	html_page.close()
 
 	parser = BeautifulSoup(data, 'html.parser')
-	
-	for tag in parser.find_all('p'):
+	matches = parser.find_all('p')
+
+	for tag in matches:
+		print(tag.text,'|',tag,'\n\n',file=sys.stderr)
 		content.append(tag.text)
 		content.append(' ')
 
