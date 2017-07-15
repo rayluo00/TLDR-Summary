@@ -15,9 +15,12 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 
+# Global variable to hold the current summary of the program request
 summary = ''
 
 #####################################################################
+'''
+'''
 def main (jsdata):
 	content = get_html(jsdata)
 	sentences = split_sentences(content)
@@ -44,6 +47,13 @@ def main (jsdata):
 	return summary
 
 #####################################################################
+'''
+RESTful api calls for post and get. Retrieves the request from the
+React app and returns the simplified summary of the given url link
+from the post.
+'''
+
+# POST METHOD
 @app.route('/', methods=['POST'])
 def get_post_data ():
 	global summary
@@ -55,6 +65,7 @@ def get_post_data ():
 
 	return 'done'
 
+# GET METHOD
 @app.route('/getmethod', methods=['GET'])
 def ajax ():
 	global summary
@@ -77,6 +88,12 @@ def split_sentences (content):
 	return sentences
 
 #####################################################################
+'''
+Create a dictionary that contains the page of words. The bag of words
+uses the words from the sentences of the html data as the key. The 
+frequency of the words in the sentences are the values. USed for 
+natural language probability.
+'''
 def create_word_bag (sentence):
 	stopword_list = stopwords.words('english')
 
@@ -88,6 +105,11 @@ def create_word_bag (sentence):
 	return word_bag
 
 #####################################################################
+'''
+Retrieve the data from the given website by filtering only <p> tags.
+Return a string of the entire content from the website, such as the
+entire news article.
+'''
 def get_html (jsdata):
 	content = []
 
@@ -108,6 +130,11 @@ def get_html (jsdata):
 
 	return ''.join(content)
 
+#####################################################################
+'''
+Starting function, runs the python server that React connects onto
+for restful API
+'''
 if __name__ == '__main__':
 	#main()
 	app.run(host='0.0.0.0')
