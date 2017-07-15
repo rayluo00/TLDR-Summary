@@ -125,7 +125,12 @@ def get_html (jsdata):
 
 	for tag in matches:
 		print(tag.text,'|',tag,'\n\n',file=sys.stderr)
+
 		content.append(tag.text)
+
+		if '.' not in tag.text[-3:]:
+			content.append('.')
+
 		content.append(' ')
 
 	return ''.join(content)
