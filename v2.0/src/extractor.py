@@ -23,8 +23,22 @@ class HTMLExtractor():
         '''
 
         soup = BeautifulSoup(html_content, 'html.parser')
-        content = soup.find_all('div', {'class': re.compile(r'.*(?<=content).*')})[0]
-        content = ' '.join([c.text for c in content.find_all('p') if len(c.text.split()) > 3])
+        
+        #content = soup.find_all('div', {'class': re.compile(r'.*(?<=content).*')})[0]
+        #content = ' '.join([c.text for c in content.find_all('p') if len(c.text.split()) > 3])
+
+        #content = soup.find_all('p', {'class': None})
+        #content = ' '.join([c.text for c in content if len(c.text.split()) > 3])
+
+        div_sections = soup.find_all('div')
+        max_div_len = -1
+        for div in div_sections:
+            div_len = len(div)
+            if div_len > max_div_len:
+                content = div
+                max_div_len = div_len
+
+        content = ' '.join(c.text for c in content.find_all('p') if len(c.text.split()) > 3)
 
         return unidecode.unidecode(content)
 
